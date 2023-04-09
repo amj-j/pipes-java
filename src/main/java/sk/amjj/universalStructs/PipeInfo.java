@@ -1,7 +1,7 @@
 package sk.amjj.universalStructs;
 
 import lombok.Getter;
-import sk.amjj.model.enums.Side;
+import sk.amjj.universalEnums.Side;
 
 @Getter
 public class PipeInfo {

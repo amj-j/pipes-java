@@ -6,7 +6,7 @@ import java.util.Random;
 import lombok.Getter;
 import sk.amjj.model.data.Board;
 import sk.amjj.model.data.Pipe;
-import sk.amjj.model.enums.Side;
+import sk.amjj.universalEnums.Side;
 import sk.amjj.universalStructs.Coords;
 
 public class RandCreator implements ICreator {

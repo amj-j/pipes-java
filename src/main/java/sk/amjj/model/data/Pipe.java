@@ -2,7 +2,7 @@ package sk.amjj.model.data;
 
 import java.util.ArrayList;
 
-import sk.amjj.model.enums.Side;
+import sk.amjj.universalEnums.Side;
 import sk.amjj.universalStructs.Coords;
 
 public class Pipe {
