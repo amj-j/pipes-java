@@ -1,21 +1,25 @@
-package sk.amjj.model;
+package sk.amjj.model.creators;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-import sk.amjj.enums.Side;
+import lombok.Getter;
+import sk.amjj.model.data.Board;
+import sk.amjj.model.data.Pipe;
+import sk.amjj.model.enums.Side;
+import sk.amjj.universalStructs.Coords;
 
 public class RandCreator implements ICreator {
     Random rand = new Random();
-    BoardInfo board;
+    Board board;
     boolean[][] tiles;
     Side startSide;
     Side finishSide;
     Coords start;
     Coords finish;
 
-    public BoardInfo createBoard(int rows, int cols) {
-        this.board = new BoardInfo(rows, cols);
+    public Board createBoard(int rows, int cols) {
+        this.board = new Board(rows, cols);
         tiles = new boolean[cols][rows];
         setStartAndFinish();
         setRoute();
@@ -96,37 +100,52 @@ public class RandCreator implements ICreator {
     }
 
     private void setPipesOnRoute() {
-        board.getRoute().get(0).addSide(startSide);
-        for (int i = 0; i < board.getRoute().size()-1; i++) {
-            //TODO
+        ArrayList<Pipe> route = board.getRoute();
+        route.get(0).addSide(startSide);
+        for (int i = 1; i < board.getRoute().size(); i++) {
+            route.get(i).addSide(startSide);
+            for (Neighbour neighbour : Neighbour.values()) {
+                Coords neighbourCoords = neighbour.getNeighbourPos(route.get(i).getPos());
+                if (route.get(i).getPos().equals(neighbourCoords)) {
+                    route.get(i).addSide(neighbour.getSide());
+                    route.get(i-1).addSide(neighbour.getSide().opposite());
+                }
+            }
         }
-        board.getRoute().get(board.getRoute().size()-1).addSide(finishSide);
+        route.get(route.size()-1).addSide(finishSide);
     }
 
     private void randomRotatePipes() {
-
+        for (Pipe pipe : board.getRoute()) {
+            int reps = rand.nextInt(Side.values().length);
+            for (int i = 0; i < reps; i++) {
+                pipe.rotate(true);
+            }
+        }
     }
 
+    @Getter
     private enum Neighbour {
-        NORTH(0, -1),
-        SOUTH(0, 1),
-        EAST(1, 0),
-        WEST(-1, 0);
+        NORTH(0, -1, Side.UP),
+        SOUTH(0, 1, Side.BOTTOM),
+        EAST(1, 0, Side.RIGHT),
+        WEST(-1, 0, Side.LEFT);
 
         private final int x;
         private final int y;
+        private final Side side;
 
-        Neighbour(int x, int y) {
+        Neighbour(int x, int y, Side side) {
             this.x = x;
             this.y = y;
+            this.side = side;
         }
 
-        public int getX() {
-            return x;
-        }
-
-        public int getY() {
-            return y;
+        public Coords getNeighbourPos(Coords baseCoords) {
+            Coords neighbourCoords = new Coords(baseCoords);
+            neighbourCoords.moveX(this.x);
+            neighbourCoords.moveY(this.y);
+            return neighbourCoords;
         }
     }
 }

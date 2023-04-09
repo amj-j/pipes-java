@@ -1,8 +1,9 @@
-package sk.amjj.model;
+package sk.amjj.model.data;
 
 import java.util.ArrayList;
 
-import sk.amjj.enums.Side;
+import sk.amjj.model.enums.Side;
+import sk.amjj.universalStructs.Coords;
 
 public class Pipe {
     private ArrayList<Boolean> pipeEnds  = new ArrayList<>();

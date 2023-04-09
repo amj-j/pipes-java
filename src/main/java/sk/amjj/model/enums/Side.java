@@ -1,4 +1,4 @@
-package sk.amjj.enums;
+package sk.amjj.model.enums;
 
 public enum Side {
     UP(0),
