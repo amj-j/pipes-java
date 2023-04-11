@@ -28,7 +28,7 @@ public class RandCreator implements ICreator {
         return this.board;
     }
 
-    public void setStartAndFinish() {
+    private void setStartAndFinish() {
         startSide = Side.values()[rand.nextInt(Side.values().length)];
         finishSide = startSide.opposite();
         this.start = getRandBorderCoords(startSide);
@@ -53,7 +53,7 @@ public class RandCreator implements ICreator {
         }
     }
 
-    public void setRoute() {
+    private void setRoute() {
         board.getRoute().add(new Pipe(start));
         randomizedDFS(start);
     }

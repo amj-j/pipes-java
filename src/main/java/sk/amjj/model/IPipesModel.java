@@ -2,6 +2,7 @@ package sk.amjj.model;
 
 import sk.amjj.exceptions.CoordsOutOfRangeException;
 import sk.amjj.exceptions.NotAPipeException;
+import sk.amjj.universalStructs.AllignmentCorrectness;
 import sk.amjj.universalStructs.BoardInfo;
 import sk.amjj.universalStructs.Coords;
 import sk.amjj.universalStructs.PipeInfo;
@@ -25,6 +26,8 @@ public interface IPipesModel {
      * @throws NotAPipeException if given coords don't contain a pipe
      */
     PipeInfo rotatePipe(Coords coords, boolean clockwise)  throws NotAPipeException, CoordsOutOfRangeException;
+
+    AllignmentCorrectness getAllignmentCorrectness();
 
     boolean arePipesAlligned();
 

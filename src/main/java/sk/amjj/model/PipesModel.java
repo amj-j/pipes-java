@@ -1,11 +1,14 @@
 package sk.amjj.model;
 
+import java.util.ArrayList;
+
 import sk.amjj.exceptions.CoordsOutOfRangeException;
 import sk.amjj.exceptions.NotAPipeException;
 import sk.amjj.model.creators.ICreator;
 import sk.amjj.model.creators.RandCreator;
 import sk.amjj.model.data.Board;
 import sk.amjj.model.data.Pipe;
+import sk.amjj.universalStructs.AllignmentCorrectness;
 import sk.amjj.universalStructs.BoardInfo;
 import sk.amjj.universalStructs.Coords;
 import sk.amjj.universalStructs.PipeInfo;
@@ -46,7 +49,7 @@ public class PipesModel implements IPipesModel {
 
     @Override
     public PipeInfo rotatePipe(Coords coords, boolean clockwise) throws NotAPipeException, CoordsOutOfRangeException {
-        if (coords.getX() < 0 || coords.getY() < 0 || coords.getX() > board.getCols() || coords.getY() > board.getRows()) {
+        if (!coords.isInRange(new Coords(0,0), new Coords(board.getCols() - 1, board.getRows() - 1))) {
             throw new CoordsOutOfRangeException();
         }
         Pipe pipe = null;
@@ -61,6 +64,20 @@ public class PipesModel implements IPipesModel {
         }
         pipe.rotate(clockwise);
         return new PipeInfo(pipe.getSides());
+    }
+
+    @Override
+    public AllignmentCorrectness getAllignmentCorrectness() {
+        ArrayList<Coords> correctlyAlligned = new ArrayList<>();
+        for (Pipe pipe : board.getRoute()) {
+            if (pipe.isCorrectlyRotated()) {
+                correctlyAlligned.add(new Coords(pipe.getPos()));
+            }
+            else {
+                return new AllignmentCorrectness(correctlyAlligned, new Coords(pipe.getPos()));
+            }
+        }
+        return null;
     }
 
     @Override

@@ -1,14 +1,17 @@
 package sk.amjj.universalStructs;
 
-import lombok.Getter;
 import sk.amjj.universalEnums.Side;
 
-@Getter
 public class PipeInfo {
-    private final boolean[] pipeEnds;
+    private final Side[] pipeEnds;
 
     public PipeInfo(Side[] sides) {
-        pipeEnds = new boolean[sides.length];
-        System.arraycopy(sides, 0, pipeEnds, 0, sides.length);
+        pipeEnds = sides;
+    }
+
+    public Side[] getPipeEnds() {
+        Side[] rtrn = new Side[pipeEnds.length];
+        System.arraycopy(pipeEnds, 0, rtrn, 0, pipeEnds.length);
+        return rtrn;
     }
 }
