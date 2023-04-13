@@ -8,6 +8,7 @@ import sk.amjj.model.creators.ICreator;
 import sk.amjj.model.creators.RandCreator;
 import sk.amjj.model.data.Board;
 import sk.amjj.model.data.Pipe;
+import sk.amjj.model.interfaces.IPipesModel;
 import sk.amjj.universalStructs.AllignmentCorrectness;
 import sk.amjj.universalStructs.BoardInfo;
 import sk.amjj.universalStructs.Coords;
@@ -20,6 +21,7 @@ public class PipesModel implements IPipesModel {
 
     public PipesModel() {
         this.creator = new RandCreator();
+        initBoard(DefaultSettings.BOARD_ROWS, DefaultSettings.BOARD_COLS);
     }
 
     @Override
@@ -33,7 +35,22 @@ public class PipesModel implements IPipesModel {
     }
 
     @Override
-    public BoardInfo newBoard(int rows, int cols) {
+    public void resetWonGames() {
+        this.gamesWon = 0;
+    }
+
+    @Override
+    public int getBoardRows() {
+        return this.board.getRows();
+    }
+
+    @Override
+    public int getBoardCols() {
+        return this.board.getCols();
+    }
+
+    @Override
+    public BoardInfo initBoard(int rows, int cols) {
         this.board = creator.createBoard(rows, cols);
         return this.getBoard();
     }

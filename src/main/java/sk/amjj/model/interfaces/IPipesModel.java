@@ -1,4 +1,4 @@
-package sk.amjj.model;
+package sk.amjj.model.interfaces;
 
 import sk.amjj.exceptions.CoordsOutOfRangeException;
 import sk.amjj.exceptions.NotAPipeException;
@@ -13,7 +13,14 @@ public interface IPipesModel {
 
     void addWonGame();
 
-    BoardInfo newBoard(int rows, int cols);
+    void resetWonGames();
+
+    int getBoardRows();
+
+    int getBoardCols();
+
+    BoardInfo initBoard(int rows, int cols);
+
 
     BoardInfo getBoard();
 

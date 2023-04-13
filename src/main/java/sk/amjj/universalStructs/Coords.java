@@ -25,7 +25,11 @@ public class Coords {
     }
 
     public boolean isInRange(Coords lim1, Coords lim2) {
-        return ((isCoordInRange(this.x, lim1.getX(), lim2.getX()) && isCoordInRange(this.y, lim1.getY(), lim2.getY())));      
+        return (isCoordInRange(this.x, lim1.getX(), lim2.getX()) && isCoordInRange(this.y, lim1.getY(), lim2.getY()));      
+    }
+
+    public boolean isInRange(int x1, int y1, int x2, int y2) {
+        return (isCoordInRange(this.x, x1, x2) && isCoordInRange(this.y, y1, y2));      
     }
 
     private boolean isCoordInRange(int coord, int lim1, int lim2) {

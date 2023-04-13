@@ -1,18 +1,28 @@
-package sk.amjj.view.tiles;
+package sk.amjj.view.swingView.board.tiles;
 
 import java.awt.Graphics;
 
 import sk.amjj.universalEnums.Side;
+import sk.amjj.universalStructs.Coords;
+import sk.amjj.universalStructs.PipeInfo;
+import sk.amjj.view.DefaultSettings;
 
 public class PipeTile extends Tile {
-    private final Side[] pipeEnds;
+    private Side[] pipeEnds;
 
-    public PipeTile(Side[] pipeEnds) {
-        this.pipeEnds = pipeEnds;
+    public PipeTile(Coords position, PipeInfo pipeInfo) {
+        super(position);
+        this.pipeEnds = pipeInfo.getPipeEnds();
+    }
+
+    public void rotate(PipeInfo pipeInfo) {
+        this.pipeEnds = pipeInfo.getPipeEnds();
+        repaint();
     }
 
     @Override
     public void paint(Graphics g) {
+        g.setColor(DefaultSettings.PIPE_COLOR);
         int pxWidth = super.getWidth() / 12;
         int pxHeight = super.getHeight() / 12;
         for (Side side : pipeEnds) {

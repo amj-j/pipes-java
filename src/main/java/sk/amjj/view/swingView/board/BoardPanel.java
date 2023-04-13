@@ -1,4 +1,4 @@
-package sk.amjj.view;
+package sk.amjj.view.swingView.board;
 
 import java.awt.GridLayout;
 import java.awt.event.ComponentAdapter;
@@ -6,18 +6,25 @@ import java.awt.event.ComponentEvent;
 
 import javax.swing.JPanel;
 
+import sk.amjj.controller.interfaces.IBoardListener;
 import sk.amjj.exceptions.CoordsOutOfRangeException;
 import sk.amjj.exceptions.InvalidBoardInfoException;
 import sk.amjj.exceptions.NotAPipeException;
+import sk.amjj.universalStructs.AllignmentCorrectness;
 import sk.amjj.universalStructs.BoardInfo;
 import sk.amjj.universalStructs.Coords;
-import sk.amjj.view.tiles.FreeTile;
-import sk.amjj.view.tiles.PipeTile;
-import sk.amjj.view.tiles.Tile;
+import sk.amjj.universalStructs.PipeInfo;
+import sk.amjj.view.DefaultSettings;
+import sk.amjj.view.interfaces.IBoardView;
+import sk.amjj.view.swingView.board.tiles.FreeTile;
+import sk.amjj.view.swingView.board.tiles.PipeTile;
+import sk.amjj.view.swingView.board.tiles.Tile;
 
-public class BoardPanel extends JPanel {
-    Tile[][] tiles;
-    JPanel board = new JPanel();
+public class BoardPanel extends JPanel implements IBoardView {
+    private Tile[][] tiles;
+    private JPanel board = new JPanel();
+    private PipeTileListener pipeTileListener = new PipeTileListener();
+    boolean correctnessHighlighted = false;
 
     public BoardPanel() {
         addComponentListener(new ComponentAdapter() {
@@ -32,7 +39,13 @@ public class BoardPanel extends JPanel {
         });
     }
 
-    public void newBoard(BoardInfo boardInfo) throws InvalidBoardInfoException {
+    @Override
+    public void addBoardListener(IBoardListener listener) {
+        this.pipeTileListener.addListener(listener);
+    }
+
+    @Override
+    public void setNewBoard(BoardInfo boardInfo) throws InvalidBoardInfoException {
         board.removeAll();
         this.tiles = new Tile[boardInfo.getCols()][boardInfo.getRows()];
         setLayoutParameters();
@@ -41,23 +54,66 @@ public class BoardPanel extends JPanel {
         setBackground(DefaultSettings.BG_COLOR); 
     }
 
-    public void initTiles(BoardInfo boardInfo) throws InvalidBoardInfoException {
+    private void initTiles(BoardInfo boardInfo) throws InvalidBoardInfoException {
         for (int y = 0; y < tiles[0].length; y++) {
             for (int x = 0; x < tiles.length; x++) {
                 try {
+                    Coords pos = new Coords(x, y);
                     if (boardInfo.isAPipe(new Coords(x,y))) {
-                        this.tiles[x][y] = new PipeTile(boardInfo.getPipeInfo(new Coords(x, y)).getPipeEnds());    
+                        this.tiles[x][y] = new PipeTile(pos, boardInfo.getPipeInfo(new Coords(x, y)));    
                     }
                     else {
-                        this.tiles[x][y] = new FreeTile();
+                        this.tiles[x][y] = new FreeTile(pos);
                     }
                 }
                 catch (NotAPipeException | CoordsOutOfRangeException e) {
                     throw new InvalidBoardInfoException();
                 }
-                board.add(this.tiles[x][y]);
+                this.board.add(this.tiles[x][y]);
+                this.tiles[x][y].addMouseListener(pipeTileListener);
             }
         }
+    }
+
+    @Override
+    public void rotatePipe(PipeInfo pipeInfo, Coords position) throws CoordsOutOfRangeException, NotAPipeException {
+        if (!position.isInRange(0, 0, tiles.length, tiles[0].length)) {
+            throw new CoordsOutOfRangeException();
+        }
+        if (tiles[position.getX()][position.getY()] instanceof PipeTile) {
+            PipeTile pipeTile = (PipeTile) tiles[position.getX()][position.getY()];
+            pipeTile.rotate(pipeInfo);
+        }
+        else {
+            throw new NotAPipeException();
+        }
+    }
+
+    @Override
+    public boolean isCorresctnessHighlighted() {
+        return this.correctnessHighlighted;
+    }
+
+    @Override
+    public void highlightCorrectness(AllignmentCorrectness allignmentCorrectness) {
+        for (Coords tilePos : allignmentCorrectness.getCorrectlyAlligned()) {
+            tiles[tilePos.getX()][tilePos.getY()].setBackground(DefaultSettings.HIGHLIGHT_CORRECT_COLOR);
+        }
+        Coords firstIncorrectPos = allignmentCorrectness.getFirstIncorrect();
+        tiles[firstIncorrectPos.getX()][firstIncorrectPos.getY()].setBackground(DefaultSettings.HIGHLIGHT_INCORRECT_COLOR);
+        this.correctnessHighlighted = true;
+    }
+
+    @Override
+    public void dehighlightCorrectness() {
+        for (int x = 0; x < tiles.length; x++) {
+            for (int y = 0; y < tiles.length; y++) {
+                if (tiles[x][y] instanceof PipeTile) {
+                    tiles[x][y].setBackground(DefaultSettings.BOARD_COLOR);
+                }
+            }
+        }
+        this.correctnessHighlighted = false;
     }
 
     private void setLayoutParameters() {
