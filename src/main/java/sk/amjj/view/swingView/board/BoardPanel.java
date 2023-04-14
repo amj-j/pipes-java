@@ -1,12 +1,14 @@
 package sk.amjj.view.swingView.board;
 
+import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 import javax.swing.JPanel;
 
-import sk.amjj.controller.interfaces.IBoardListener;
+import sk.amjj.controller.IEventListener;
 import sk.amjj.exceptions.CoordsOutOfRangeException;
 import sk.amjj.exceptions.InvalidBoardInfoException;
 import sk.amjj.exceptions.NotAPipeException;
@@ -15,12 +17,11 @@ import sk.amjj.universalStructs.BoardInfo;
 import sk.amjj.universalStructs.Coords;
 import sk.amjj.universalStructs.PipeInfo;
 import sk.amjj.view.DefaultSettings;
-import sk.amjj.view.interfaces.IBoardView;
 import sk.amjj.view.swingView.board.tiles.FreeTile;
 import sk.amjj.view.swingView.board.tiles.PipeTile;
 import sk.amjj.view.swingView.board.tiles.Tile;
 
-public class BoardPanel extends JPanel implements IBoardView {
+public class BoardPanel extends JPanel implements IBoardPanel {
     private Tile[][] tiles;
     private JPanel board = new JPanel();
     private PipeTileListener pipeTileListener = new PipeTileListener();
@@ -40,7 +41,7 @@ public class BoardPanel extends JPanel implements IBoardView {
     }
 
     @Override
-    public void addBoardListener(IBoardListener listener) {
+    public void addEventListener(IEventListener listener) {
         this.pipeTileListener.addListener(listener);
     }
 
@@ -167,5 +168,15 @@ public class BoardPanel extends JPanel implements IBoardView {
         int offsetX = (getWidth() - boardWidth)/2;
         int offsetY = tileSize/2;
         this.board.setBounds(offsetX, offsetY, boardWidth, boardHeight);
+    }
+
+    @Override
+    public void addTo(Container container) {
+        container.add(this);
+    }
+
+    @Override
+    public void setPrefferedSize(Dimension d) {
+        this.setPreferredSize(d);
     }
 }

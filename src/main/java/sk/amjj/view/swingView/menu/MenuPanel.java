@@ -1,5 +1,7 @@
 package sk.amjj.view.swingView.menu;
 
+import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -14,11 +16,10 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import sk.amjj.controller.interfaces.IMenuListener;
+import sk.amjj.controller.IEventListener;
 import sk.amjj.view.DefaultSettings;
-import sk.amjj.view.interfaces.IMenuView;
 
-public class MenuPanel extends JPanel implements IMenuView {
+public class MenuPanel extends JPanel implements IMenuPanel {
     private MenuPanelListener menuPanelListener = new MenuPanelListener();
 
     JLabel gamesWon;
@@ -105,7 +106,7 @@ public class MenuPanel extends JPanel implements IMenuView {
     }
 
     @Override
-    public void addMenuListener(IMenuListener listener) {
+    public void addEventListener(IEventListener listener) {
         this.menuPanelListener.addListener(listener);
     }
 
@@ -117,5 +118,15 @@ public class MenuPanel extends JPanel implements IMenuView {
     @Override
     public void showBoardSize(int rows, int cols) {
         this.sizeInfo.setText("BOARD SIZE\n" + rows + "x" + cols);
+    }
+
+    @Override
+    public void addTo(Container container) {
+        container.add(this);
+    }
+
+    @Override
+    public void setPrefferedSize(Dimension d) {
+        this.setPreferredSize(d);
     }
 }

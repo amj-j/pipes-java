@@ -1,4 +1,4 @@
-package sk.amjj.model.interfaces;
+package sk.amjj.model;
 
 import sk.amjj.exceptions.CoordsOutOfRangeException;
 import sk.amjj.exceptions.NotAPipeException;

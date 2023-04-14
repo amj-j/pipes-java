@@ -8,7 +8,6 @@ import sk.amjj.model.creators.ICreator;
 import sk.amjj.model.creators.RandCreator;
 import sk.amjj.model.data.Board;
 import sk.amjj.model.data.Pipe;
-import sk.amjj.model.interfaces.IPipesModel;
 import sk.amjj.universalStructs.AllignmentCorrectness;
 import sk.amjj.universalStructs.BoardInfo;
 import sk.amjj.universalStructs.Coords;

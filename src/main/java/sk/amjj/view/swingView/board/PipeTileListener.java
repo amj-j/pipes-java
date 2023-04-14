@@ -4,18 +4,18 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-import sk.amjj.controller.interfaces.IBoardListener;
+import sk.amjj.controller.IEventListener;
 import sk.amjj.view.DefaultSettings;
 import sk.amjj.view.swingView.board.tiles.PipeTile;
 
 public class PipeTileListener extends MouseAdapter {
-    private ArrayList<IBoardListener> listeners = new ArrayList<>();
+    private ArrayList<IEventListener> listeners = new ArrayList<>();
 
     public PipeTileListener() {
         super();
     }
 
-    public void addListener(IBoardListener listener) {
+    public void addListener(IEventListener listener) {
         this.listeners.add(listener);
     } 
 
@@ -32,7 +32,7 @@ public class PipeTileListener extends MouseAdapter {
             return;
         }
         PipeTile tile = (PipeTile) e.getComponent();
-        for (IBoardListener listener : listeners) {
+        for (IEventListener listener : listeners) {
             listener.rotatePipe(tile.getPositon(), clockwise);
         }
     }
