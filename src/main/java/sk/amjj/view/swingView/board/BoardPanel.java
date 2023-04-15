@@ -22,22 +22,25 @@ import sk.amjj.view.swingView.board.tiles.PipeTile;
 import sk.amjj.view.swingView.board.tiles.Tile;
 
 public class BoardPanel extends JPanel implements IBoardPanel {
-    private Tile[][] tiles;
+    private Tile[][] tiles = new Tile[1][1];
     private JPanel board = new JPanel();
     private PipeTileListener pipeTileListener = new PipeTileListener();
     boolean correctnessHighlighted = false;
 
     public BoardPanel() {
+        setBackground(DefaultSettings.HIGHLIGHT_INCORRECT_COLOR);
+        this.add(board);
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
                 if (board == null) {
                     return;
                 }
+                System.out.println("component resized.");
                 setLayoutParameters();
-                repaint();
             }
         });
+        
     }
 
     @Override
@@ -47,21 +50,24 @@ public class BoardPanel extends JPanel implements IBoardPanel {
 
     @Override
     public void setNewBoard(BoardInfo boardInfo) throws InvalidBoardInfoException {
+        System.out.println("New board");
         board.removeAll();
         this.tiles = new Tile[boardInfo.getCols()][boardInfo.getRows()];
-        setLayoutParameters();
+
         board.setLayout(new GridLayout(boardInfo.getRows(), boardInfo.getCols()));
         initTiles(boardInfo);
-        setBackground(DefaultSettings.BG_COLOR); 
+        setLayoutParameters();
     }
 
     private void initTiles(BoardInfo boardInfo) throws InvalidBoardInfoException {
+        System.out.println("initTiles()");
         for (int y = 0; y < tiles[0].length; y++) {
             for (int x = 0; x < tiles.length; x++) {
                 try {
                     Coords pos = new Coords(x, y);
                     if (boardInfo.isAPipe(new Coords(x,y))) {
-                        this.tiles[x][y] = new PipeTile(pos, boardInfo.getPipeInfo(new Coords(x, y)));    
+                        this.tiles[x][y] = new PipeTile(pos, boardInfo.getPipeInfo(new Coords(x, y)));
+                        this.tiles[x][y].addMouseListener(pipeTileListener);
                     }
                     else {
                         this.tiles[x][y] = new FreeTile(pos);
@@ -71,7 +77,6 @@ public class BoardPanel extends JPanel implements IBoardPanel {
                     throw new InvalidBoardInfoException();
                 }
                 this.board.add(this.tiles[x][y]);
-                this.tiles[x][y].addMouseListener(pipeTileListener);
             }
         }
     }
@@ -118,6 +123,9 @@ public class BoardPanel extends JPanel implements IBoardPanel {
     }
 
     private void setLayoutParameters() {
+        if (getWidth() == 0 || getHeight() == 0) {
+            return;
+        }
         double panelWHRatio = ((double) getWidth()) / ((double) getHeight());
         double boardCRRatio = ((double) tiles.length) / ((double) tiles[0].length);
         if (panelWHRatio > 1.0) {
@@ -145,7 +153,7 @@ public class BoardPanel extends JPanel implements IBoardPanel {
             else {
                 constraintByWidth();
             }
-        } 
+        }
     }
 
     private void constraintByWidth() {
@@ -157,17 +165,26 @@ public class BoardPanel extends JPanel implements IBoardPanel {
         int offsetX = tileSize/2;
         int offsetY = (getHeight() - boardHeight)/2;
         this.board.setBounds(offsetX, offsetY, boardWidth, boardHeight);
+        this.board.setPreferredSize(new Dimension(boardWidth, boardHeight));
     }
 
     private void constraintByHeight() {
         int cols = tiles.length;
         int rows = tiles[0].length;
-        int tileSize = getWidth() / (rows + 1);
+        int tileSize = getHeight() / (rows + 1);
         int boardWidth = cols*tileSize;
         int boardHeight = rows*tileSize;
         int offsetX = (getWidth() - boardWidth)/2;
         int offsetY = tileSize/2;
+        System.out.println("Previous board size: " + board.getWidth() + " " + board.getHeight());
         this.board.setBounds(offsetX, offsetY, boardWidth, boardHeight);
+        System.out.println("Board size after setbounds: " + board.getWidth() + " " + board.getHeight());
+        this.board.setPreferredSize(new Dimension(boardWidth, boardHeight));
+        Dimension d = board.getLayout().preferredLayoutSize(board);
+        System.out.println("Set board size: " + boardWidth + " " + boardHeight);
+        System.out.println("Preferred layout: " + d.getWidth() + " " + d.getHeight());
+        System.out.println("Board size: " + board.getWidth() + " " + board.getHeight());
+        System.out.println("Offset: " + offsetX + " " + offsetY);
     }
 
     @Override
@@ -176,7 +193,7 @@ public class BoardPanel extends JPanel implements IBoardPanel {
     }
 
     @Override
-    public void setPrefferedSize(Dimension d) {
-        this.setPreferredSize(d);
+    public void setPreferredSize(Dimension d) {
+        super.setPreferredSize(d);
     }
 }

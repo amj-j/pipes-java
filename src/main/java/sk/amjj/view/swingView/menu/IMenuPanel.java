@@ -10,5 +10,5 @@ public interface IMenuPanel {
     void showBoardSize(int rows, int cols);
     void addEventListener(IEventListener listener);
     void addTo(Container container);
-    void setPrefferedSize(Dimension d);
+    void setPreferredSize(Dimension d);
 }

@@ -31,26 +31,18 @@ public class Pipe {
         this.pipeEnds.set(side.getIndex(), true);
     }
 
-    public void addSides(Side[] ends) {
-        for (int i = 0; i < ends.length; i++) {
-            this.correctPipeEnds.set(Side.values()[i].getIndex(), true);
-            this.pipeEnds.set(Side.values()[i].getIndex(), true);
-        }
-    }
-
     public boolean hasSide(Side side) {
         return this.pipeEnds.get(side.getIndex());
     }
 
     public Side[] getSides() {
-        Side[] ends = new Side[pipeEnds.size()];
+        ArrayList<Side> ends = new ArrayList<>();
         for (int i = 0; i < pipeEnds.size(); i++) {
-            Side side = Side.values()[i];
-            if (pipeEnds.get(side.getIndex())) {
-                ends[i] = side;
+            if (pipeEnds.get(i)) {
+                ends.add(Side.values()[i]);
             }
         }
-        return ends;
+        return ends.toArray(new Side[0]);
     }
 
     /**

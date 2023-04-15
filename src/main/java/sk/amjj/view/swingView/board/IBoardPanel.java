@@ -20,5 +20,5 @@ public interface IBoardPanel {
     void dehighlightCorrectness();
     void addEventListener(IEventListener listener);
     void addTo(Container container);
-    void setPrefferedSize(Dimension d);
+    void setPreferredSize(Dimension d);
 }

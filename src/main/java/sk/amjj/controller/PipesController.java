@@ -38,7 +38,7 @@ public class PipesController implements IEventListener {
         } 
         catch (NotAPipeException e) {
             System.err.println("Bad request from the view.");
-            failOnException(e);;
+            failOnException(e);
         }
         catch (CoordsOutOfRangeException e) {
             System.err.println("Bad request from the view.");
@@ -54,9 +54,7 @@ public class PipesController implements IEventListener {
                 view.setNewBoard(boardInfo);
             } catch (InvalidBoardInfoException e) {
                 System.err.println("Bad response from the model.");
-                e.print();
-                e.printStackTrace();
-                System.exit(0);
+                failOnException(e);
             }
             model.addWonGame();
             view.showWonGames(model.getWonGames());
@@ -75,9 +73,7 @@ public class PipesController implements IEventListener {
             view.setNewBoard(boardInfo);
         } catch (InvalidBoardInfoException e) {
             System.err.println("Bad response from the model.");
-            e.print();
-            e.printStackTrace();
-            System.exit(0);
+            failOnException(e);
         }
         view.showBoardSize(model.getBoardRows(), model.getBoardCols());
     }
@@ -89,9 +85,7 @@ public class PipesController implements IEventListener {
             view.setNewBoard(boardInfo);
         } catch (InvalidBoardInfoException e) {
             System.err.println("Bad response from the model.");
-            e.print();
-            e.printStackTrace();
-            System.exit(0);
+            failOnException(e);
         }
         model.resetWonGames();
         view.showWonGames(model.getWonGames());

@@ -27,7 +27,7 @@ public class MenuPanelListener extends KeyAdapter {
 
     public void checkPipeAllignment() {
         for (IEventListener listener : listeners) {
-            listener.resetGame();
+            listener.checkPipeAllignment();
         }
     }
 

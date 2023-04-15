@@ -103,10 +103,9 @@ public class RandCreator implements ICreator {
         ArrayList<Pipe> route = board.getRoute();
         route.get(0).addSide(startSide);
         for (int i = 1; i < board.getRoute().size(); i++) {
-            route.get(i).addSide(startSide);
             for (Neighbour neighbour : Neighbour.values()) {
                 Coords neighbourCoords = neighbour.getNeighbourPos(route.get(i).getPos());
-                if (route.get(i).getPos().equals(neighbourCoords)) {
+                if (route.get(i-1).getPos().equals(neighbourCoords)) {
                     route.get(i).addSide(neighbour.getSide());
                     route.get(i-1).addSide(neighbour.getSide().opposite());
                 }

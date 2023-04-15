@@ -21,6 +21,7 @@ import sk.amjj.view.DefaultSettings;
 
 public class MenuPanel extends JPanel implements IMenuPanel {
     private MenuPanelListener menuPanelListener = new MenuPanelListener();
+    private FlowLayout layout = new FlowLayout(FlowLayout.CENTER);
 
     JLabel gamesWon;
     JLabel sizeInfo;
@@ -29,44 +30,41 @@ public class MenuPanel extends JPanel implements IMenuPanel {
     JButton checkerButton;
     
     public MenuPanel() {
-        this.setLayout(new FlowLayout());
+        setLayout(this.layout);
+        setBackground(DefaultSettings.BG_COLOR);
         initGamesWon();
         initSizeInfo();
         initSizeSlider();
         initResetButton();
         initCheckerButton();
-    }
 
-    private void initGamesWon() {
-        this.gamesWon = new JLabel();
-        this.gamesWon.addComponentListener(new ComponentAdapter() {
+        this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                int fontSize = Math.min(gamesWon.getHeight(), gamesWon.getWidth()) /4;
+                int fontSize = getWidth() /32;
                 Font font = new Font(DefaultSettings.FONT_NAME, Font.BOLD, fontSize);
                 gamesWon.setForeground(DefaultSettings.FONT_COLOR);
                 gamesWon.setFont(font);
-            }   
+                sizeInfo.setForeground(DefaultSettings.FONT_COLOR);
+                sizeInfo.setFont(font);
+                layout.setHgap(getWidth()/25);
+            }
         });
+    }
+
+    private void initGamesWon() {
+        this.gamesWon = new JLabel("Score: N/A");
         this.add(this.gamesWon);
     }
 
     private void initSizeInfo() {
-        this.sizeInfo = new JLabel();
-        this.sizeInfo.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                int fontSize = Math.min(sizeInfo.getHeight(), sizeInfo.getWidth()) /4;
-                Font font = new Font(DefaultSettings.FONT_NAME, Font.BOLD, fontSize);
-                sizeInfo.setForeground(DefaultSettings.FONT_COLOR);
-                sizeInfo.setFont(font);
-            }   
-        });
+        this.sizeInfo = new JLabel("Size: N/A");
         this.add(this.sizeInfo);
     }
 
     private void initSizeSlider() {
         this.sizeSlider = new JSlider(JSlider.HORIZONTAL, 8, 12, 8);
+        sizeSlider.setBackground(DefaultSettings.BG_COLOR);
         sizeSlider.setMinorTickSpacing(2);
         sizeSlider.setMajorTickSpacing(2);
         sizeSlider.setSnapToTicks(true);
@@ -84,7 +82,7 @@ public class MenuPanel extends JPanel implements IMenuPanel {
     }
 
     private void initResetButton() {
-        this.resetButton = new JButton();
+        this.resetButton = new JButton("Reset");
         this.resetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -95,7 +93,7 @@ public class MenuPanel extends JPanel implements IMenuPanel {
     }
 
     private void initCheckerButton() {
-        this.checkerButton = new JButton();
+        this.checkerButton = new JButton("Check");
         this.checkerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -112,12 +110,12 @@ public class MenuPanel extends JPanel implements IMenuPanel {
 
     @Override
     public void showWonGames(int gamesWon) {
-        this.gamesWon.setText("Games won: " + gamesWon);
+        this.gamesWon.setText("Score: " + gamesWon);
     }
 
     @Override
     public void showBoardSize(int rows, int cols) {
-        this.sizeInfo.setText("BOARD SIZE\n" + rows + "x" + cols);
+        this.sizeInfo.setText("Size: " + rows + "x" + cols);
     }
 
     @Override
@@ -126,7 +124,7 @@ public class MenuPanel extends JPanel implements IMenuPanel {
     }
 
     @Override
-    public void setPrefferedSize(Dimension d) {
-        this.setPreferredSize(d);
+    public void setPreferredSize(Dimension d) {
+        super.setPreferredSize(d);
     }
 }

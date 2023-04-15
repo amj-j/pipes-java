@@ -18,4 +18,5 @@ public interface IView {
     void showWonGames(int gamesWon);
     void showBoardSize(int rows, int cols);
     void addEventListener(IEventListener listener);
+    void setVisible();
 }

@@ -23,25 +23,29 @@ public class PipeTile extends Tile {
     @Override
     public void paint(Graphics g) {
         g.setColor(DefaultSettings.PIPE_COLOR);
-        int pxWidth = super.getWidth() / 12;
-        int pxHeight = super.getHeight() / 12;
+        double pxWidth = ((double) super.getWidth()) / 12;
+        double pxHeight = ((double) super.getHeight()) / 12;
         for (Side side : pipeEnds) {
             if (side == Side.UP) {
-                g.fillRect(4*pxWidth, 0, 4*pxWidth, 8*pxHeight);
-                g.fillRect(3*pxHeight, 0, 6*pxWidth, pxHeight);
+                fillRect(g, 4*pxWidth, 0.0, 4*pxWidth, 8*pxHeight);
+                fillRect(g, 3*pxHeight, 0.0, 6*pxWidth, pxHeight);
             }
             else if (side == Side.RIGHT) {
-                g.fillRect(4*pxWidth, 4*pxHeight, 8*pxWidth, 4*pxHeight);
-                g.fillRect(11*pxHeight, 3*pxHeight, pxWidth, 6*pxHeight);
+                fillRect(g, 4*pxWidth, 4*pxHeight, 8*pxWidth, 4*pxHeight);
+                fillRect(g, 11*pxHeight, 3*pxHeight, pxWidth, 6*pxHeight);
             }
             else if (side == Side.BOTTOM) {
-                g.fillRect(4*pxWidth, 4*pxHeight, 4*pxWidth, 8*pxHeight);
-                g.fillRect(3*pxHeight, 11*pxHeight, 6*pxWidth, pxHeight);
+                fillRect(g, 4*pxWidth, 4*pxHeight, 4*pxWidth, 8*pxHeight);
+                fillRect(g, 3*pxHeight, 11*pxHeight, 6*pxWidth, pxHeight);
             }
             else if (side == Side.LEFT) {
-                g.fillRect(0, 4*pxHeight, 8*pxWidth, 4*pxHeight);
-                g.fillRect(0, 3*pxHeight, pxWidth, 6*pxHeight);
+                fillRect(g, 0.0, 4*pxHeight, 8*pxWidth, 4*pxHeight);
+                fillRect(g, 0.0, 3*pxHeight, pxWidth, 6*pxHeight);
             }
         }
+    }
+
+    private void fillRect(Graphics g, double x, double y, double width, double height) {
+        g.fillRect((int) Math.round(x), (int) Math.round(y), (int) Math.round(width), (int) Math.round(height));
     }
 }
