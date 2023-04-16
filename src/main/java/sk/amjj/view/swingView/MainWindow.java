@@ -1,8 +1,11 @@
 package sk.amjj.view.swingView;
 
 import java.awt.Dimension;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.KeyEvent;
 
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
@@ -25,10 +28,11 @@ import sk.amjj.view.swingView.menu.MenuPanel;
 public class MainWindow extends JFrame implements IView {
     IBoardPanel board;
     IMenuPanel menu;
+    EventDispatcher eventDispatcher = new EventDispatcher();
 
     public MainWindow() {
-        this.board = new BoardPanel();
-        this.menu = new MenuPanel();
+        this.board = new BoardPanel(eventDispatcher);
+        this.menu = new MenuPanel(eventDispatcher);
 
         setSize(new Dimension(DefaultSettings.MAIN_WINDOW_WIDTH, DefaultSettings.MAIN_WINDOW_HEIGHT));
         setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
@@ -41,12 +45,32 @@ public class MainWindow extends JFrame implements IView {
                 board.setPreferredSize(new Dimension(windowWidth, 5*(windowHeight/6)));
                 menu.setPreferredSize(new Dimension(windowWidth, windowHeight/6));
             }
+        });
 
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
             @Override
-            public void componentShown(ComponentEvent e) {
-                componentResized(e);
+            public boolean dispatchKeyEvent(KeyEvent e) {
+                if (e.getID() == KeyEvent.KEY_PRESSED) {
+                    switch (e.getKeyCode()) {
+                        case KeyEvent.VK_R:
+                                eventDispatcher.resetGame();
+                                break;
+                            
+                        case KeyEvent.VK_ENTER:
+                            eventDispatcher.checkPipeAllignment();
+                            break;
+                        
+                        case KeyEvent.VK_ESCAPE:
+                            eventDispatcher.exitApp();
+                            break;
+                    
+                        default:
+                    }
+                }
+                return false;
             }
         });
+
         
         this.board.addTo(this);
         this.menu.addTo(this);
@@ -89,8 +113,7 @@ public class MainWindow extends JFrame implements IView {
 
     @Override
     public void addEventListener(IEventListener listener) {
-        board.addEventListener(listener);
-        menu.addEventListener(listener);
+        this.eventDispatcher.addListener(listener);
     }
 
     @Override

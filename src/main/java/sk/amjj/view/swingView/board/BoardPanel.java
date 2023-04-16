@@ -8,7 +8,6 @@ import java.awt.event.ComponentEvent;
 
 import javax.swing.JPanel;
 
-import sk.amjj.controller.IEventListener;
 import sk.amjj.exceptions.CoordsOutOfRangeException;
 import sk.amjj.exceptions.InvalidBoardInfoException;
 import sk.amjj.exceptions.NotAPipeException;
@@ -17,6 +16,7 @@ import sk.amjj.universalStructs.BoardInfo;
 import sk.amjj.universalStructs.Coords;
 import sk.amjj.universalStructs.PipeInfo;
 import sk.amjj.view.DefaultSettings;
+import sk.amjj.view.swingView.EventDispatcher;
 import sk.amjj.view.swingView.board.tiles.FreeTile;
 import sk.amjj.view.swingView.board.tiles.PipeTile;
 import sk.amjj.view.swingView.board.tiles.Tile;
@@ -24,11 +24,12 @@ import sk.amjj.view.swingView.board.tiles.Tile;
 public class BoardPanel extends JPanel implements IBoardPanel {
     private Tile[][] tiles = new Tile[1][1];
     private JPanel board = new JPanel();
-    private PipeTileListener pipeTileListener = new PipeTileListener();
-    boolean correctnessHighlighted = false;
+    private PipeTileListener pipeTileListener;
 
-    public BoardPanel() {
-        setBackground(DefaultSettings.HIGHLIGHT_INCORRECT_COLOR);
+    public BoardPanel(EventDispatcher eventDispatcher) {
+        this.pipeTileListener = new PipeTileListener(eventDispatcher);
+        setLayout(null);
+        setBackground(DefaultSettings.BG_COLOR);
         this.add(board);
         addComponentListener(new ComponentAdapter() {
             @Override
@@ -36,31 +37,21 @@ public class BoardPanel extends JPanel implements IBoardPanel {
                 if (board == null) {
                     return;
                 }
-                System.out.println("component resized.");
                 setLayoutParameters();
             }
         });
-        
-    }
-
-    @Override
-    public void addEventListener(IEventListener listener) {
-        this.pipeTileListener.addListener(listener);
     }
 
     @Override
     public void setNewBoard(BoardInfo boardInfo) throws InvalidBoardInfoException {
-        System.out.println("New board");
         board.removeAll();
         this.tiles = new Tile[boardInfo.getCols()][boardInfo.getRows()];
-
         board.setLayout(new GridLayout(boardInfo.getRows(), boardInfo.getCols()));
         initTiles(boardInfo);
         setLayoutParameters();
     }
 
     private void initTiles(BoardInfo boardInfo) throws InvalidBoardInfoException {
-        System.out.println("initTiles()");
         for (int y = 0; y < tiles[0].length; y++) {
             for (int x = 0; x < tiles.length; x++) {
                 try {
@@ -97,17 +88,17 @@ public class BoardPanel extends JPanel implements IBoardPanel {
 
     @Override
     public boolean isCorresctnessHighlighted() {
-        return this.correctnessHighlighted;
+        return pipeTileListener.isCorrectnessHighlighted();
     }
 
     @Override
     public void highlightCorrectness(AllignmentCorrectness allignmentCorrectness) {
         for (Coords tilePos : allignmentCorrectness.getCorrectlyAlligned()) {
-            tiles[tilePos.getX()][tilePos.getY()].setBackground(DefaultSettings.HIGHLIGHT_CORRECT_COLOR);
+            tiles[tilePos.getX()][tilePos.getY()].setBgColor(DefaultSettings.HIGHLIGHT_CORRECT_COLOR);
         }
         Coords firstIncorrectPos = allignmentCorrectness.getFirstIncorrect();
-        tiles[firstIncorrectPos.getX()][firstIncorrectPos.getY()].setBackground(DefaultSettings.HIGHLIGHT_INCORRECT_COLOR);
-        this.correctnessHighlighted = true;
+        tiles[firstIncorrectPos.getX()][firstIncorrectPos.getY()].setBgColor(DefaultSettings.HIGHLIGHT_INCORRECT_COLOR);
+        pipeTileListener.setCorrectnessHighlighted(true);
     }
 
     @Override
@@ -115,11 +106,11 @@ public class BoardPanel extends JPanel implements IBoardPanel {
         for (int x = 0; x < tiles.length; x++) {
             for (int y = 0; y < tiles.length; y++) {
                 if (tiles[x][y] instanceof PipeTile) {
-                    tiles[x][y].setBackground(DefaultSettings.BOARD_COLOR);
+                    tiles[x][y].setBgColor(DefaultSettings.BOARD_COLOR);
                 }
             }
         }
-        this.correctnessHighlighted = false;
+        pipeTileListener.setCorrectnessHighlighted(false);
     }
 
     private void setLayoutParameters() {
@@ -165,7 +156,6 @@ public class BoardPanel extends JPanel implements IBoardPanel {
         int offsetX = tileSize/2;
         int offsetY = (getHeight() - boardHeight)/2;
         this.board.setBounds(offsetX, offsetY, boardWidth, boardHeight);
-        this.board.setPreferredSize(new Dimension(boardWidth, boardHeight));
     }
 
     private void constraintByHeight() {
@@ -176,15 +166,7 @@ public class BoardPanel extends JPanel implements IBoardPanel {
         int boardHeight = rows*tileSize;
         int offsetX = (getWidth() - boardWidth)/2;
         int offsetY = tileSize/2;
-        System.out.println("Previous board size: " + board.getWidth() + " " + board.getHeight());
         this.board.setBounds(offsetX, offsetY, boardWidth, boardHeight);
-        System.out.println("Board size after setbounds: " + board.getWidth() + " " + board.getHeight());
-        this.board.setPreferredSize(new Dimension(boardWidth, boardHeight));
-        Dimension d = board.getLayout().preferredLayoutSize(board);
-        System.out.println("Set board size: " + boardWidth + " " + boardHeight);
-        System.out.println("Preferred layout: " + d.getWidth() + " " + d.getHeight());
-        System.out.println("Board size: " + board.getWidth() + " " + board.getHeight());
-        System.out.println("Offset: " + offsetX + " " + offsetY);
     }
 
     @Override

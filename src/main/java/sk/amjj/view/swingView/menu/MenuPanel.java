@@ -16,11 +16,11 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import sk.amjj.controller.IEventListener;
 import sk.amjj.view.DefaultSettings;
+import sk.amjj.view.swingView.EventDispatcher;
 
 public class MenuPanel extends JPanel implements IMenuPanel {
-    private MenuPanelListener menuPanelListener = new MenuPanelListener();
+    private EventDispatcher eventDispatcher = new EventDispatcher();
     private FlowLayout layout = new FlowLayout(FlowLayout.CENTER);
 
     JLabel gamesWon;
@@ -29,25 +29,26 @@ public class MenuPanel extends JPanel implements IMenuPanel {
     JButton resetButton;
     JButton checkerButton;
     
-    public MenuPanel() {
+    public MenuPanel(EventDispatcher eventDispatcher) {
+        this.eventDispatcher = eventDispatcher;
         setLayout(this.layout);
         setBackground(DefaultSettings.BG_COLOR);
-        initGamesWon();
-        initSizeInfo();
         initSizeSlider();
         initResetButton();
         initCheckerButton();
+        initGamesWon();
+        initSizeInfo();
 
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                int fontSize = getWidth() /32;
-                Font font = new Font(DefaultSettings.FONT_NAME, Font.BOLD, fontSize);
-                gamesWon.setForeground(DefaultSettings.FONT_COLOR);
-                gamesWon.setFont(font);
-                sizeInfo.setForeground(DefaultSettings.FONT_COLOR);
-                sizeInfo.setFont(font);
+                resizeLabel(gamesWon);
+                resizeLabel(sizeInfo);
+                resizeSlider(sizeSlider);
+                resizeButton(resetButton);
+                resizeButton(checkerButton);
                 layout.setHgap(getWidth()/25);
+                layout.setVgap(getHeight()/5);
             }
         });
     }
@@ -75,7 +76,7 @@ public class MenuPanel extends JPanel implements IMenuPanel {
             public void stateChanged(ChangeEvent e) {
                 JSlider source = (JSlider) e.getSource();
                 int value = source.getValue();
-                menuPanelListener.changeBoardSize(value, value);
+                eventDispatcher.changeBoardSize(value, value);
             }
         });
         this.add(this.sizeSlider);
@@ -86,7 +87,7 @@ public class MenuPanel extends JPanel implements IMenuPanel {
         this.resetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                menuPanelListener.resetGame();
+                eventDispatcher.resetGame();
             }
         });
         this.add(this.resetButton);
@@ -97,19 +98,15 @@ public class MenuPanel extends JPanel implements IMenuPanel {
         this.checkerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                menuPanelListener.checkPipeAllignment();
+                eventDispatcher.checkPipeAllignment();
             }
         });
         this.add(this.checkerButton);
     }
 
     @Override
-    public void addEventListener(IEventListener listener) {
-        this.menuPanelListener.addListener(listener);
-    }
-
-    @Override
     public void showWonGames(int gamesWon) {
+        //this.gamesWon.setText("Score: N/A");
         this.gamesWon.setText("Score: " + gamesWon);
     }
 
@@ -126,5 +123,29 @@ public class MenuPanel extends JPanel implements IMenuPanel {
     @Override
     public void setPreferredSize(Dimension d) {
         super.setPreferredSize(d);
+    }
+
+    private void resizeLabel(JLabel label) {
+        int fontSize = getWidth() /32;
+        Font font = new Font(DefaultSettings.FONT_NAME, Font.BOLD, fontSize);
+        label.setForeground(DefaultSettings.FONT_COLOR);
+        label.setFont(font);
+    }
+
+    private void resizeSlider(JSlider slider) {
+        slider.setPreferredSize(new Dimension(getWidth()/6, getHeight()/2));
+        int fontSize = getWidth() /60;
+        Font font = new Font(DefaultSettings.FONT_NAME, Font.BOLD, fontSize);
+        slider.setForeground(DefaultSettings.FONT_COLOR);
+        slider.setFont(font);
+    }
+
+    private void resizeButton(JButton button) {
+        button.setPreferredSize(new Dimension(getWidth()/8, getHeight()/2));
+        int fontSize = getWidth() /50;
+        Font font = new Font(DefaultSettings.FONT_NAME, Font.BOLD, fontSize);
+        button.setForeground(DefaultSettings.FONT_COLOR);
+        button.setFont(font);
+        button.setBackground(DefaultSettings.BUTTON_COLOR);
     }
 }

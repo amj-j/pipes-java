@@ -1,16 +1,21 @@
-package sk.amjj.view.swingView.menu;
+package sk.amjj.view.swingView;
 
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import sk.amjj.controller.IEventListener;
+import sk.amjj.universalStructs.Coords;
 
-public class MenuPanelListener extends KeyAdapter {
+public class EventDispatcher {
     private ArrayList<IEventListener> listeners = new ArrayList<>();
 
     public void addListener(IEventListener listener) {
         this.listeners.add(listener);
+    }
+
+    public void rotatePipe(Coords pos, boolean clockwise) {
+        for (IEventListener listener : listeners) {
+            listener.rotatePipe(pos, clockwise);
+        }
     }
 
     public void changeBoardSize(int rows, int cols) {
@@ -36,25 +41,4 @@ public class MenuPanelListener extends KeyAdapter {
             listener.exitApp();
         }
     }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        switch (e.getKeyCode()) {
-            case KeyEvent.VK_R:
-                resetGame();
-                break;
-            
-            case KeyEvent.VK_ENTER:
-                checkPipeAllignment();
-                break;
-            
-            case KeyEvent.VK_ESCAPE:
-                exitApp();
-                break;
-        
-            default:
-                return;
-        }
-    }
-
 }

@@ -2,22 +2,23 @@ package sk.amjj.view.swingView.board;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 
-import sk.amjj.controller.IEventListener;
+import lombok.Getter;
+import lombok.Setter;
 import sk.amjj.view.DefaultSettings;
+import sk.amjj.view.swingView.EventDispatcher;
 import sk.amjj.view.swingView.board.tiles.PipeTile;
+import sk.amjj.view.swingView.board.tiles.Tile;
 
 public class PipeTileListener extends MouseAdapter {
-    private ArrayList<IEventListener> listeners = new ArrayList<>();
+    private EventDispatcher eventDispatcher;
 
-    public PipeTileListener() {
-        super();
+    @Getter @Setter
+    private boolean correctnessHighlighted = false;
+
+    public PipeTileListener(EventDispatcher eventDispatcher) {
+        this.eventDispatcher = eventDispatcher;
     }
-
-    public void addListener(IEventListener listener) {
-        this.listeners.add(listener);
-    } 
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -32,9 +33,7 @@ public class PipeTileListener extends MouseAdapter {
             return;
         }
         PipeTile tile = (PipeTile) e.getComponent();
-        for (IEventListener listener : listeners) {
-            listener.rotatePipe(tile.getPositon(), clockwise);
-        }
+        eventDispatcher.rotatePipe(tile.getPositon(), clockwise);
     }
 
     @Override
@@ -44,7 +43,7 @@ public class PipeTileListener extends MouseAdapter {
 
     @Override
     public void mouseExited(MouseEvent e) {
-        e.getComponent().setBackground(DefaultSettings.BOARD_COLOR);
+        e.getComponent().setBackground(((Tile) e.getComponent()).getBgColor());
     }
 
 

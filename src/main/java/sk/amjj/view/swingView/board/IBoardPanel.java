@@ -3,7 +3,6 @@ package sk.amjj.view.swingView.board;
 import java.awt.Container;
 import java.awt.Dimension;
 
-import sk.amjj.controller.IEventListener;
 import sk.amjj.exceptions.CoordsOutOfRangeException;
 import sk.amjj.exceptions.InvalidBoardInfoException;
 import sk.amjj.exceptions.NotAPipeException;
@@ -18,7 +17,6 @@ public interface IBoardPanel {
     boolean isCorresctnessHighlighted();
     void highlightCorrectness(AllignmentCorrectness allignmentCorrectness);
     void dehighlightCorrectness();
-    void addEventListener(IEventListener listener);
     void addTo(Container container);
     void setPreferredSize(Dimension d);
 }
