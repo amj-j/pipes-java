@@ -12,6 +12,7 @@ import sk.amjj.view.swingView.board.tiles.Tile;
 
 public class PipeTileListener extends MouseAdapter {
     private EventDispatcher eventDispatcher;
+    private PipeTile pressedTile;
 
     @Getter @Setter
     private boolean correctnessHighlighted = false;
@@ -21,19 +22,25 @@ public class PipeTileListener extends MouseAdapter {
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
-        PipeTile tile = (PipeTile) e.getComponent();
-        boolean clockwise;
-        if (e.getButton() == MouseEvent.BUTTON1) {
-            clockwise = false;
+    public void mousePressed(MouseEvent e) {
+        this.pressedTile = (PipeTile) e.getComponent();
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        if (this.pressedTile == e.getComponent() ) {
+            boolean clockwise;
+            if (e.getButton() == MouseEvent.BUTTON1) {
+                clockwise = false;
+            }
+            else if(e.getButton() == MouseEvent.BUTTON3) {
+                clockwise = true;
+            }
+            else {
+                return;
+            }
+            eventDispatcher.rotatePipe(this.pressedTile.getPositon(), clockwise);
         }
-        else if(e.getButton() == MouseEvent.BUTTON3) {
-            clockwise = true;
-        }
-        else {
-            return;
-        }
-        eventDispatcher.rotatePipe(tile.getPositon(), clockwise);
     }
 
     @Override
@@ -44,6 +51,7 @@ public class PipeTileListener extends MouseAdapter {
     @Override
     public void mouseExited(MouseEvent e) {
         e.getComponent().setBackground(((Tile) e.getComponent()).getBgColor());
+        this.pressedTile = null;
     }
 
 

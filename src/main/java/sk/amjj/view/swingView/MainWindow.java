@@ -6,6 +6,8 @@ import java.awt.KeyboardFocusManager;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
@@ -36,7 +38,6 @@ public class MainWindow extends JFrame implements IView {
 
         setSize(new Dimension(DefaultSettings.MAIN_WINDOW_WIDTH, DefaultSettings.MAIN_WINDOW_HEIGHT));
         setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -71,6 +72,12 @@ public class MainWindow extends JFrame implements IView {
             }
         });
 
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                eventDispatcher.exitApp();
+            }
+        });
         
         this.board.addTo(this);
         this.menu.addTo(this);
