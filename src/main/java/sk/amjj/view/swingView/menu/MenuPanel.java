@@ -106,7 +106,7 @@ public class MenuPanel extends JPanel implements IMenuPanel {
 
     @Override
     public void showWonGames(int gamesWon) {
-        //this.gamesWon.setText("Score: N/A");
+        this.gamesWon.setText("Score: N/A");
         this.gamesWon.setText("Score: " + gamesWon);
     }
 

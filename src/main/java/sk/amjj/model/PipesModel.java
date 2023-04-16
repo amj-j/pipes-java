@@ -60,7 +60,7 @@ public class PipesModel implements IPipesModel {
         for (Pipe pipe : board.getRoute()) {
             tiles[pipe.getPos().getX()][pipe.getPos().getY()] = new PipeInfo(pipe.getSides());
         }
-        return new BoardInfo(tiles);
+        return new BoardInfo(tiles, board.getRouteStart(), board.getRouteEnd());
     }
 
     @Override

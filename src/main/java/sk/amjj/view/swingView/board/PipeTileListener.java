@@ -22,6 +22,7 @@ public class PipeTileListener extends MouseAdapter {
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        PipeTile tile = (PipeTile) e.getComponent();
         boolean clockwise;
         if (e.getButton() == MouseEvent.BUTTON1) {
             clockwise = false;
@@ -32,7 +33,6 @@ public class PipeTileListener extends MouseAdapter {
         else {
             return;
         }
-        PipeTile tile = (PipeTile) e.getComponent();
         eventDispatcher.rotatePipe(tile.getPositon(), clockwise);
     }
 

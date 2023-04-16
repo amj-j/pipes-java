@@ -70,6 +70,17 @@ public class BoardPanel extends JPanel implements IBoardPanel {
                 this.board.add(this.tiles[x][y]);
             }
         }
+        setRouteEnd(boardInfo.getStartPos());
+        setRouteEnd(boardInfo.getEndPos());
+    }
+
+    private void setRouteEnd(Coords pos) throws InvalidBoardInfoException {
+        if (tiles[pos.getX()][pos.getY()] instanceof PipeTile) {
+            ((PipeTile) tiles[pos.getX()][pos.getY()]).setAsRouteEnd();
+        }
+        else {
+            throw new InvalidBoardInfoException();
+        }
     }
 
     @Override

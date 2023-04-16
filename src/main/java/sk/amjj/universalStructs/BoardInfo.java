@@ -1,14 +1,14 @@
 package sk.amjj.universalStructs;
 
+import lombok.AllArgsConstructor;
 import sk.amjj.exceptions.CoordsOutOfRangeException;
 import sk.amjj.exceptions.NotAPipeException;
 
+@AllArgsConstructor
 public class BoardInfo {
     private final PipeInfo[][] tiles;
-
-    public BoardInfo(PipeInfo[][] tiles) {
-        this.tiles = tiles;
-    }
+    private final Coords startPos;
+    private final Coords endPos;
 
     public int getRows() {
         return this.tiles[0].length;
@@ -30,5 +30,13 @@ public class BoardInfo {
             throw new NotAPipeException();
         }
         return tiles[pos.getX()][pos.getY()];
+    }
+
+    public Coords getStartPos() {
+        return new Coords(startPos);
+    }
+
+    public Coords getEndPos() {
+        return new Coords(endPos);
     }
 }

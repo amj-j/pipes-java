@@ -76,6 +76,8 @@ public class PipesController implements IEventListener {
             failOnException(e);
         }
         view.showBoardSize(model.getBoardRows(), model.getBoardCols());
+        model.resetWonGames();
+        view.showWonGames(model.getWonGames());
     }
 
     @Override
