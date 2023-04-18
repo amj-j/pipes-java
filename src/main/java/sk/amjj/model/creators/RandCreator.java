@@ -10,13 +10,13 @@ import sk.amjj.universalEnums.Side;
 import sk.amjj.universalStructs.Coords;
 
 public class RandCreator implements ICreator {
-    Random rand = new Random();
-    Board board;
-    boolean[][] tiles;
-    Side startSide;
-    Side finishSide;
-    Coords start;
-    Coords finish;
+    private Random rand = new Random();
+    private Board board;
+    private boolean[][] tiles;
+    private Side startSide;
+    private Side finishSide;
+    private Coords start;
+    private Coords finish;
 
     public Board createBoard(int rows, int cols) {
         this.board = new Board(rows, cols);

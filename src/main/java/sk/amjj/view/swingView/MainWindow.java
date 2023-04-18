@@ -28,9 +28,9 @@ import sk.amjj.view.swingView.menu.IMenuPanel;
 import sk.amjj.view.swingView.menu.MenuPanel;
 
 public class MainWindow extends JFrame implements IView {
-    IBoardPanel board;
-    IMenuPanel menu;
-    EventDispatcher eventDispatcher = new EventDispatcher();
+    private IBoardPanel board;
+    private IMenuPanel menu;
+    private EventDispatcher eventDispatcher = new EventDispatcher();
 
     public MainWindow() {
         this.board = new BoardPanel(eventDispatcher);
