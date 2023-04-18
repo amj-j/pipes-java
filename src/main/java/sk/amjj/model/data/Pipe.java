@@ -6,16 +6,12 @@ import sk.amjj.universalEnums.Side;
 import sk.amjj.universalStructs.Coords;
 
 public class Pipe {
-    private ArrayList<Boolean> pipeEnds  = new ArrayList<>();
-    private ArrayList<Boolean> correctPipeEnds  = new ArrayList<>();
+    private final ArrayList<Side> pipeEnds  = new ArrayList<>();
+    private final ArrayList<Side> correctPipeEnds  = new ArrayList<>();
     Coords pos = new Coords();
     
     public Pipe(Coords pos) {
         this.pos = pos;
-        for (int i = 0; i < Side.values().length; i++) {
-            this.correctPipeEnds.add(false);
-            this.pipeEnds.add(false);
-        }
     }
 
     public void setPos(Coords pos) {
@@ -27,22 +23,17 @@ public class Pipe {
     }
 
     public void addSide(Side side) {
-        this.correctPipeEnds.set(side.getIndex(), true);
-        this.pipeEnds.set(side.getIndex(), true);
+        this.correctPipeEnds.add(side);
+        this.pipeEnds.add(side);
     }
 
     public boolean hasSide(Side side) {
-        return this.pipeEnds.get(side.getIndex());
+        return this.pipeEnds.contains(side);
     }
 
     public Side[] getSides() {
-        ArrayList<Side> ends = new ArrayList<>();
-        for (int i = 0; i < pipeEnds.size(); i++) {
-            if (pipeEnds.get(i)) {
-                ends.add(Side.values()[i]);
-            }
-        }
-        return ends.toArray(new Side[0]);
+        Side[] array = new Side[this.pipeEnds.size()];
+        return this.pipeEnds.toArray(array);
     }
 
     /**
@@ -51,20 +42,12 @@ public class Pipe {
      */
 
     public void rotate(boolean clockwise) {
-        if (clockwise) {
-            pipeEnds.add(0, pipeEnds.remove(pipeEnds.size()-1));
-        }
-        else {
-            pipeEnds.add(pipeEnds.remove(0));
+        for (int i = 0; i < pipeEnds.size(); i++) {
+            this.pipeEnds.set(i, this.pipeEnds.get(i).next(clockwise));
         }
     }
 
     public boolean isCorrectlyRotated() {
-        for (int i = 0; i < pipeEnds.size(); i++) {
-            if (pipeEnds.get(i) != correctPipeEnds.get(i)) {
-                return false;
-            }
-        }
-        return true;
+        return (pipeEnds.size() == correctPipeEnds.size()) && pipeEnds.containsAll(correctPipeEnds) && correctPipeEnds.containsAll(pipeEnds);
     }
 }

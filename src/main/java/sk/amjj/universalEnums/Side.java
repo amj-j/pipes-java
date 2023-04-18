@@ -1,20 +1,10 @@
 package sk.amjj.universalEnums;
 
 public enum Side {
-    UP(0),
-    RIGHT(1),
-    BOTTOM(2),
-    LEFT(3);
-
-    public final int index;
-
-    Side(int index) {
-        this.index = index;
-    }
-
-    public int getIndex() {
-        return this.index;
-    }
+    UP,
+    RIGHT,
+    BOTTOM,
+    LEFT;
 
     /**
      * Returns next side in clockwise or counter clockwise direction
