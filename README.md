@@ -20,13 +20,16 @@ such as event-driven programming and component-based design,
 which are also used in modern frameworks, through the Java Swing library.
 
 ## Prerequisites
-You need to have Java 1.8 (also known as Java 8) or higher installed on you computer to run this app.
+- JDK 8 or higher
+- Maven
 
 ## Installation
-1. Download the ```pipes.jar``` file.
-2. Open your terminal and navigate to folder in which the downloaded ```pipes.jar``` file is located.
-3. Type this command into the terminal to run the app: ```java -jar pipes.jar```.
-4. The app will run in a new window.
+1. Open your terminal and navigate to folder in which you wish to clone this repository.
+2. Clone this repository using ```git clone https://github.com/amj-j/pipes-java.git```
+3. In your terminal, navigate inside the new directory created by cloning the repository.
+4. Type this command into your terminal to create an executable ```jar``` file: ```mvn package```
+5. Type this command into the terminal to run the app: ```java -jar target/pipes-1.0.jar```
+6. The app will run in a new window.
 
 ## Gameplay
 There is a set of pipe pieces in a rectangular area. They can all together make a continuous pipeline. 

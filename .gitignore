@@ -4,6 +4,4 @@ target
 B-OOP-assignment2.iml
 
 # VS code
-.settings/
-.classpath
-.project
+.vscode
