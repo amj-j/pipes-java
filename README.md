@@ -15,7 +15,7 @@ These projects can be found on my GitHub:
 and [Rook in maze](https://github.com/amj-j/rook-in-maze-java).
 
 ### Goal
-The purpose of this assignment is to practide the foundational principles of GUI development,
+The purpose of this assignment is to practice the foundational principles of GUI development,
 such as event-driven programming and component-based design,
 which are also used in modern frameworks, through the Java Swing library.
 
